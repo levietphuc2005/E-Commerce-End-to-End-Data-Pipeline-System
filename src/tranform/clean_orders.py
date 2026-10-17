@@ -1,11 +1,19 @@
 import pandas as pd
 from pathlib import Path
+import sys
+
+
+try:
+    from src.extract.extract_orders import extract_orders
+except ModuleNotFoundError:
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    from src.extract.extract_orders import extract_orders
 
 BASE_DIR = Path(__file__).resolve().parents[2]
 raw_file = BASE_DIR / "data" / "raw" / "orders.csv"
 processed_file = BASE_DIR / "data" / "processed" / "orders_clean.csv"
 
-df = pd.read_csv(raw_file)
+df = extract_orders(raw_file)
 
 df["customer_name"] = (
     df["customer_name"]
